@@ -1,0 +1,70 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Donation
+// ─────────────────────────────────────────────
+model Donation {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  address   String?
+  amount    Float
+  currency  String   @default("USD")
+  message   String?
+  status    DonationStatus @default(PENDING)
+  reference String?  @unique  // payment gateway reference
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@map("donations")
+}
+
+enum DonationStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// ─────────────────────────────────────────────
+// Contact Message
+// ─────────────────────────────────────────────
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([isRead])
+  @@map("contacts")
+}
+
+// ─────────────────────────────────────────────
+// Newsletter Subscriber
+// ─────────────────────────────────────────────
+model Subscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  isActive    Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  unsubscribedAt DateTime?
+
+  @@index([isActive])
+  @@map("subscribers")
+}

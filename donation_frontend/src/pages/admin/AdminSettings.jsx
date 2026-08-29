@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Save, Phone, Mail, MapPin, Bitcoin, Loader2 } from 'lucide-react'
+import { Save, Phone, Bitcoin, Loader2, Lock } from 'lucide-react'
 import { FacebookIcon, TelegramIcon, InstagramIcon } from '../../components/SocialIcons'
 import api from '../../services/api'
 
@@ -13,6 +13,10 @@ export default function AdminSettings() {
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirm: '' })
+  const [pwSaving, setPwSaving] = useState(false)
+  const [pwSuccess, setPwSuccess] = useState(false)
+  const [pwError, setPwError] = useState('')
 
   useEffect(() => {
     api.getSettings()
@@ -137,7 +141,7 @@ export default function AdminSettings() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
-                <span className="w-4 h-4 bg-green-500 rounded-full inline-block" /> USDT (TRC20 / ERC20)
+                <span className="w-4 h-4 bg-green-500 rounded-full inline-block" /> USDT Tether (TRC20)
               </label>
               <input name="usdtAddress" value={form.usdtAddress} onChange={handleChange}
                 className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-primary"
@@ -162,6 +166,52 @@ export default function AdminSettings() {
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Settings'}
         </button>
+      </form>
+
+      {/* Change Password */}
+      <form onSubmit={async e => {
+        e.preventDefault()
+        if (pwForm.newPassword !== pwForm.confirm) { setPwError('Passwords do not match'); return }
+        setPwSaving(true); setPwError(''); setPwSuccess(false)
+        try {
+          await api.post('/auth/change-password', { currentPassword: pwForm.currentPassword, newPassword: pwForm.newPassword })
+          setPwSuccess(true)
+          setPwForm({ currentPassword: '', newPassword: '', confirm: '' })
+          setTimeout(() => setPwSuccess(false), 3000)
+        } catch (err) { setPwError(err.message || 'Failed to change password') }
+        finally { setPwSaving(false) }
+      }} className="max-w-2xl mt-6">
+        <div className="bg-white rounded-sm shadow-sm border border-gray-100 p-6">
+          <h2 className="font-bold text-secondary font-heading mb-5 flex items-center gap-2">
+            <Lock className="w-5 h-5 text-primary" /> Change Password
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Current Password</label>
+              <input type="password" value={pwForm.currentPassword} onChange={e => setPwForm(f => ({ ...f, currentPassword: e.target.value }))}
+                className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
+                placeholder="Enter current password" required />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
+              <input type="password" value={pwForm.newPassword} onChange={e => setPwForm(f => ({ ...f, newPassword: e.target.value }))}
+                className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
+                placeholder="Enter new password (min 8 characters)" required minLength={8} />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
+              <input type="password" value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))}
+                className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
+                placeholder="Repeat new password" required />
+            </div>
+          </div>
+          {pwSuccess && <p className="text-green-600 text-sm mt-3">✅ Password changed successfully.</p>}
+          {pwError && <p className="text-red-600 text-sm mt-3">{pwError}</p>}
+          <button type="submit" disabled={pwSaving} className="btn-primary flex items-center gap-2 mt-5 disabled:opacity-60">
+            {pwSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+            {pwSaving ? 'Changing...' : 'Change Password'}
+          </button>
+        </div>
       </form>
     </div>
   )

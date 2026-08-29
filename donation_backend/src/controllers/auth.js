@@ -21,9 +21,22 @@ async function login(req, res, next) {
   } catch (err) { next(err) }
 }
 
-// GET /api/auth/me — get logged-in admin
+// GET /api/auth/me
 async function getMe(req, res) {
   res.json({ success: true, data: req.admin })
 }
 
-module.exports = { login, getMe }
+// POST /api/auth/change-password
+async function changePassword(req, res, next) {
+  try {
+    const { currentPassword, newPassword } = req.body
+    const admin = await Admin.findById(req.admin._id).select('+password')
+    if (!(await admin.comparePassword(currentPassword)))
+      return res.status(401).json({ success: false, error: 'Current password is incorrect.' })
+    admin.password = newPassword
+    await admin.save()
+    res.json({ success: true, message: 'Password changed successfully.' })
+  } catch (err) { next(err) }
+}
+
+module.exports = { login, getMe, changePassword }

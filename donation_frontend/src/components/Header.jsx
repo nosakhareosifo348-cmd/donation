@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Mail, Phone, Globe, MessageCircle, Camera, Play, Heart, Search, Menu, X } from 'lucide-react'
+import { Mail, Phone, Heart, Search, Menu, X } from 'lucide-react'
+import { FacebookIcon, TelegramIcon, InstagramIcon } from './SocialIcons'
+import { useSettings } from '../context/SettingsContext'
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -15,6 +17,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const settings = useSettings()
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 80)
@@ -28,22 +31,36 @@ export default function Header() {
       <div className="top-bar text-white py-2 hidden md:block">
         <div className="container-custom flex justify-between items-center text-xs">
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2">
-              <Mail className="w-3.5 h-3.5" />
-              info@intlcharity.org
-            </span>
-            <span className="flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5" />
-              +1 (800) 123-4567
-            </span>
+            {settings.email && (
+              <span className="flex items-center gap-2">
+                <Mail className="w-3.5 h-3.5" />
+                {settings.email}
+              </span>
+            )}
+            {settings.phone && (
+              <span className="flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5" />
+                {settings.phone}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-4">
-            <span>Mon - Fri: 9:00am - 5:00pm</span>
             <div className="flex gap-3">
-              <a href="#" className="hover:text-primary transition-colors"><Globe className="w-3.5 h-3.5" /></a>
-              <a href="#" className="hover:text-primary transition-colors"><MessageCircle className="w-3.5 h-3.5" /></a>
-              <a href="#" className="hover:text-primary transition-colors"><Camera className="w-3.5 h-3.5" /></a>
-              <a href="#" className="hover:text-primary transition-colors"><Play className="w-3.5 h-3.5" /></a>
+              {[
+                { Icon: FacebookIcon, url: settings.facebookUrl },
+                { Icon: TelegramIcon, url: settings.telegramUrl },
+                { Icon: InstagramIcon, url: settings.instagramUrl },
+              ].map(({ Icon, url }, i) =>
+                url ? (
+                  <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                    <Icon className="w-3.5 h-3.5" />
+                  </a>
+                ) : (
+                  <span key={i} className="opacity-40 cursor-default">
+                    <Icon className="w-3.5 h-3.5" />
+                  </span>
+                )
+              )}
             </div>
           </div>
         </div>

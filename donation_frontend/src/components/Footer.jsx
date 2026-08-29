@@ -1,5 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, Globe, MessageCircle, Camera, Play, MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { Heart, MapPin, Phone, Mail } from 'lucide-react'
+import { FacebookIcon, TelegramIcon, InstagramIcon } from './SocialIcons'
+import { useSettings } from '../context/SettingsContext'
+import api from '../services/api'
 
 const footerLinks = {
   'Quick Links': [
@@ -19,6 +23,21 @@ const footerLinks = {
 }
 
 export default function Footer() {
+  const [email, setEmail] = useState('')
+  const [subStatus, setSubStatus] = useState('')
+  const settings = useSettings()
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault()
+    if (!email) return
+    try {
+      await api.subscribe(email)
+      setSubStatus('success')
+      setEmail('')
+    } catch {
+      setSubStatus('error')
+    }
+  }
   return (
     <footer className="bg-secondary text-white relative overflow-hidden">
       {/* Decorative shapes */}
@@ -34,11 +53,13 @@ export default function Footer() {
               <p className="text-white/80 text-sm">Get the latest news and other tips</p>
             </div>
             <form
-              className="flex gap-0 w-full md:w-auto"
-              onSubmit={e => e.preventDefault()}
+              className="flex gap-0 w-full md:w-auto flex-col sm:flex-row"
+              onSubmit={handleSubscribe}
             >
               <input
                 type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 placeholder="Enter your email address"
                 className="flex-1 md:w-72 px-5 py-3.5 text-gray-800 text-sm focus:outline-none rounded-l-sm"
               />
@@ -48,6 +69,8 @@ export default function Footer() {
               >
                 Subscribe
               </button>
+              {subStatus === 'success' && <p className="text-white text-xs mt-2 sm:mt-0 sm:ml-3 self-center">✅ Subscribed!</p>}
+              {subStatus === 'error' && <p className="text-white/70 text-xs mt-2 sm:mt-0 sm:ml-3 self-center">Already subscribed or invalid email.</p>}
             </form>
           </div>
         </div>
@@ -72,11 +95,21 @@ export default function Footer() {
                 GiveHope Organization was established in 2014 to save orphaned, abandoned, and vulnerable children and provide them with shelter, education, and hope.
               </p>
               <div className="flex gap-3">
-                {[Globe, MessageCircle, Camera, Play].map((Icon, i) => (
-                  <a key={i} href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
-                    <Icon className="w-4 h-4" />
-                  </a>
-                ))}
+                {[
+                  { Icon: FacebookIcon, url: settings.facebookUrl },
+                  { Icon: TelegramIcon, url: settings.telegramUrl },
+                  { Icon: InstagramIcon, url: settings.instagramUrl },
+                ].map(({ Icon, url }, i) =>
+                  url ? (
+                    <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                      <Icon className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <span key={i} className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center opacity-40 cursor-default">
+                      <Icon className="w-4 h-4" />
+                    </span>
+                  )
+                )}
               </div>
             </div>
 
@@ -110,20 +143,17 @@ export default function Footer() {
               <ul className="space-y-4">
                 <li className="flex gap-3 text-sm text-white/70">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span>123 Charity Lane, Suite 100<br/>New York, NY 10001, USA</span>
+                  <span style={{ whiteSpace: 'pre-line' }}>{settings.address}</span>
                 </li>
                 <li className="flex gap-3 text-sm text-white/70">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span>+1 (800) 123-4567</span>
+                  <span>{settings.phone}</span>
                 </li>
                 <li className="flex gap-3 text-sm text-white/70">
                   <Mail className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span>info@intlcharity.org</span>
+                  <span>{settings.email}</span>
                 </li>
-                <li className="flex gap-3 text-sm text-white/70">
-                  <Clock className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span>Mon - Fri: 9:00am – 5:00pm</span>
-                </li>
+
               </ul>
             </div>
           </div>

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, Loader2, Copy, Check } from 'lucide-react'
+import api from '../services/api'
+import { useSettings } from '../context/SettingsContext'
 
 const amounts = [500, 1000, 2500, 5000]
 
@@ -34,12 +36,31 @@ export default function Donate() {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({ name: '', email: '', address: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [copied, setCopied] = useState('')
+  const settings = useSettings()
+
+  const copyAddress = (addr, key) => {
+    navigator.clipboard.writeText(addr)
+    setCopied(key)
+    setTimeout(() => setCopied(''), 2000)
+  }
 
   const finalAmount = isCustom ? (parseFloat(custom) || 0) : selected
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setLoading(true)
+    setError('')
+    try {
+      await api.createDonation({ ...form, amount: finalAmount, currency: 'USD' })
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -78,25 +99,36 @@ export default function Donate() {
 
               {/* Payment Info */}
               <div className="bg-white rounded-sm p-6 shadow-md">
-                <h4 className="font-bold text-secondary font-heading mb-4 text-lg">Payment Information</h4>
+                <h4 className="font-bold text-secondary font-heading mb-4 text-lg">Crypto Donations</h4>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  In order to make an offline donation we ask that you please follow any of these instructions:
+                  Send crypto directly to any of these wallet addresses:
                 </p>
-                <div className="space-y-4">
-                  <div className="border border-gray-100 rounded-sm p-4">
-                    <div className="font-semibold text-secondary text-sm mb-1">Bank Transfer</div>
-                    <div className="text-xs text-gray-500 space-y-1">
-                      <div>Bank: International Bank</div>
-                      <div>Account: 1234567890</div>
-                      <div>Routing: 987654321</div>
+                <div className="space-y-3">
+                  {[
+                    { key: 'btc', label: 'Bitcoin (BTC)', color: 'bg-orange-500', addr: settings?.btcAddress },
+                    { key: 'eth', label: 'Ethereum (ETH)', color: 'bg-blue-500', addr: settings?.ethAddress },
+                    { key: 'usdt', label: 'USDT Tether (TRC20)', color: 'bg-green-500', addr: settings?.usdtAddress },
+                  ].map(({ key, label, color, addr }) => addr ? (
+                    <div key={key} className="border border-gray-100 rounded-sm p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`w-3 h-3 rounded-full ${color}`} />
+                        <span className="font-semibold text-secondary text-sm">{label}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 font-mono break-all flex-1">{addr}</span>
+                        <button
+                          onClick={() => copyAddress(addr, key)}
+                          className="flex-shrink-0 text-gray-400 hover:text-primary transition-colors"
+                          title="Copy address"
+                        >
+                          {copied === key ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="border border-gray-100 rounded-sm p-4">
-                    <div className="font-semibold text-secondary text-sm mb-1">Cryptocurrency</div>
-                    <div className="text-xs text-gray-500 break-all">
-                      BTC: 1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf
-                    </div>
-                  </div>
+                  ) : null)}
+                  {!settings?.btcAddress && !settings?.ethAddress && !settings?.usdtAddress && (
+                    <p className="text-xs text-gray-400 italic">Crypto addresses coming soon.</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -142,7 +174,7 @@ export default function Donate() {
                           {amounts.map(amt => (
                             <button
                               key={amt}
-                              onClick={() => { setSelected(amt); setIsCustom(false) }}
+                              onClick={() => { setSelected(amt); setIsCustom(false); setCustom('') }}
                               className={`px-6 py-3 rounded-sm border-2 font-bold text-sm transition-all ${
                                 !isCustom && selected === amt
                                   ? 'bg-primary border-primary text-white'
@@ -152,29 +184,21 @@ export default function Donate() {
                               ${amt.toLocaleString()}
                             </button>
                           ))}
-                          <button
-                            onClick={() => setIsCustom(true)}
-                            className={`px-6 py-3 rounded-sm border-2 font-bold text-sm transition-all ${
-                              isCustom ? 'bg-primary border-primary text-white' : 'border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
-                            }`}
-                          >
-                            Custom
-                          </button>
                         </div>
 
-                        {isCustom && (
-                          <div className="relative mb-4">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
-                            <input
-                              type="number"
-                              value={custom}
-                              onChange={e => setCustom(e.target.value)}
-                              placeholder="Enter amount"
-                              className="w-full border-2 border-primary rounded-sm pl-8 pr-4 py-3 text-secondary font-bold focus:outline-none focus:ring-2 focus:ring-primary/20"
-                              min="1"
-                            />
-                          </div>
-                        )}
+                        {/* Amount input always visible */}
+                        <div className="relative mb-4">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                          <input
+                            type="number"
+                            value={isCustom ? custom : selected}
+                            onChange={e => { setIsCustom(true); setCustom(e.target.value) }}
+                            onFocus={() => setIsCustom(true)}
+                            placeholder="Enter or select amount"
+                            className="w-full border-2 border-primary rounded-sm pl-8 pr-4 py-3 text-secondary font-bold focus:outline-none focus:ring-2 focus:ring-primary/20"
+                            min="1"
+                          />
+                        </div>
 
                         {finalAmount > 0 && (
                           <div className="bg-gray-50 rounded-sm p-4 mb-6 flex justify-between items-center">

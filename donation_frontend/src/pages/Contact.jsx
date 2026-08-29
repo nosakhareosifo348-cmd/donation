@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Clock, CheckCircle } from 'lucide-react'
+import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react'
+import api from '../services/api'
+import { useSettings } from '../context/SettingsContext'
 
 function PageBanner({ title, breadcrumb }) {
   return (
@@ -28,10 +30,22 @@ function PageBanner({ title, breadcrumb }) {
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const settings = useSettings()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSent(true)
+    setLoading(true)
+    setError('')
+    try {
+      await api.submitContact(form)
+      setSent(true)
+    } catch (err) {
+      setError(err.message || 'Failed to send message. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -53,23 +67,19 @@ export default function Contact() {
                   {
                     icon: <MapPin className="w-6 h-6" />,
                     title: 'Our Location',
-                    value: '123 Charity Lane, Suite 100\nNew York, NY 10001, USA',
+                    value: settings.address,
                   },
                   {
                     icon: <Phone className="w-6 h-6" />,
                     title: 'Phone Number',
-                    value: '+1 (800) 123-4567',
+                    value: settings.phone,
                   },
                   {
                     icon: <Mail className="w-6 h-6" />,
                     title: 'Email Address',
-                    value: 'info@intlcharity.org',
+                    value: settings.email,
                   },
-                  {
-                    icon: <Clock className="w-6 h-6" />,
-                    title: 'Working Hours',
-                    value: 'Mon - Fri: 9:00am – 5:00pm',
-                  },
+
                 ].map(item => (
                   <div key={item.title} className="flex gap-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-primary">

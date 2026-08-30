@@ -9,8 +9,8 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about-us', label: 'About Us' },
   { to: '/causes', label: 'Causes' },
-  { to: '/donate', label: 'Events', disabled: true },
-  { to: '/donate', label: 'Gallery', disabled: true },
+  { to: '/events', label: 'Events' },
+  { to: '/blog', label: 'Blog' },
   { to: '/contact', label: 'Contact' },
 ]
 

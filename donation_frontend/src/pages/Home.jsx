@@ -12,7 +12,7 @@ export default function Home() {
       <HeroSlider />
       <AboutSection />
       <PartnerSection />
-      <CausesSection limit={3} />
+      <CausesSection limit={3} showStats={false} />
       <CounterSection />
       <FeaturesSection />
       <TeamGallerySection />

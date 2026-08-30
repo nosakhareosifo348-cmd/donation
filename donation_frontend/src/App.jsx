@@ -7,6 +7,10 @@ import Home from './pages/Home'
 import AboutUs from './pages/AboutUs'
 import Donate from './pages/Donate'
 import Causes from './pages/Causes'
+import CauseDetail from './pages/CauseDetail'
+import Events from './pages/Events'
+import Blog from './pages/Blog'
+import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import ScrollToTop from './components/ScrollToTop'
@@ -60,6 +64,10 @@ export default function App() {
                   <Route path="/about-us" element={<AboutUs />} />
                   <Route path="/donate" element={<Donate />} />
                   <Route path="/causes" element={<Causes />} />
+                  <Route path="/causes/:id" element={<CauseDetail />} />
+                  <Route path="/events" element={<Events />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:id" element={<BlogPost />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

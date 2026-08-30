@@ -42,6 +42,11 @@ const api = {
   getSettings: () => api.get('/settings'),
   updateSettings: (data) => request('/settings', { method: 'PUT', body: JSON.stringify(data) }),
 
+  // Volunteers
+  applyVolunteer: (data) => api.post('/volunteers', data),
+  getVolunteers: (params = '') => api.get(`/volunteers${params}`),
+  updateVolunteerStatus: (id, status) => api.patch(`/volunteers/${id}/status`, { status }),
+
   // Events
   getEvents: (params = '') => api.get(`/events${params}`),
   createEvent: (data) => api.post('/events', data),

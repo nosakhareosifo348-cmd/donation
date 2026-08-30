@@ -12,6 +12,8 @@ const footerLinks = {
     { label: 'About Us', to: '/about-us' },
     { label: 'Our Causes', to: '/causes' },
     { label: 'Donate', to: '/donate' },
+    { label: 'Volunteer', to: '/volunteer' },
+    { label: 'FAQ', to: '/faq' },
     { label: 'Contact Us', to: '/contact' },
   ],
   'Our Causes': [

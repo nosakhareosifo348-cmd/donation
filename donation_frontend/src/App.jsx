@@ -11,6 +11,8 @@ import CauseDetail from './pages/CauseDetail'
 import Events from './pages/Events'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+import FAQ from './pages/FAQ'
+import Volunteer from './pages/Volunteer'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import ScrollToTop from './components/ScrollToTop'
@@ -27,6 +29,7 @@ import AdminSubscribers from './pages/admin/AdminSubscribers'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminEvents from './pages/admin/AdminEvents'
 import AdminBlog from './pages/admin/AdminBlog'
+import AdminVolunteers from './pages/admin/AdminVolunteers'
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -49,6 +52,7 @@ export default function App() {
           <Route path="subscribers" element={<AdminSubscribers />} />
           <Route path="events" element={<AdminEvents />} />
           <Route path="blog" element={<AdminBlog />} />
+          <Route path="volunteers" element={<AdminVolunteers />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
 
@@ -68,6 +72,8 @@ export default function App() {
                   <Route path="/events" element={<Events />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:id" element={<BlogPost />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/volunteer" element={<Volunteer />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

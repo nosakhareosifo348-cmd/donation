@@ -190,19 +190,19 @@ export default function AdminSettings() {
               <label className="block text-sm font-semibold text-gray-700 mb-1">Current Password</label>
               <input type="password" value={pwForm.currentPassword} onChange={e => setPwForm(f => ({ ...f, currentPassword: e.target.value }))}
                 className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
-                placeholder="Enter current password" required />
+                placeholder="Current password" required />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
               <input type="password" value={pwForm.newPassword} onChange={e => setPwForm(f => ({ ...f, newPassword: e.target.value }))}
                 className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
-                placeholder="Enter new password (min 8 characters)" required minLength={8} />
+                placeholder="New password (min 8 characters)" required minLength={8} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
               <input type="password" value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))}
                 className="w-full border border-gray-200 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
-                placeholder="Repeat new password" required />
+                placeholder="Confirm new password" required />
             </div>
           </div>
           {pwSuccess && <p className="text-green-600 text-sm mt-3">✅ Password changed successfully.</p>}

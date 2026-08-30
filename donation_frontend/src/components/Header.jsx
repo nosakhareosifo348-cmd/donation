@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Mail, Phone, Heart, Search, Menu, X } from 'lucide-react'
 import { FacebookIcon, TelegramIcon, InstagramIcon } from './SocialIcons'
 import { useSettings } from '../context/SettingsContext'
+import Logo from './Logo'
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -71,15 +72,7 @@ export default function Header() {
         <div className="container-custom">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 flex-shrink-0">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                <Heart className="w-6 h-6 text-white" fill="white" />
-              </div>
-              <div>
-                <div className="font-bold text-secondary text-sm leading-tight font-heading">GiveHope</div>
-                <div className="text-primary text-xs font-semibold tracking-wider uppercase">Organization</div>
-              </div>
-            </Link>
+            <Logo />
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-8">

@@ -16,8 +16,8 @@ export default {
         light: '#f9f9f9',
       },
       fontFamily: {
-        heading: ['Playfair Display', 'Georgia', 'serif'],
-        body: ['Poppins', 'Helvetica', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
+        body: ['Inter', 'Helvetica', 'sans-serif'],
       },
     },
   },

@@ -119,7 +119,7 @@ export default function Contact() {
                             value={form.name}
                             onChange={e => setForm({ ...form, name: e.target.value })}
                             className="w-full border border-gray-200 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary"
-                            placeholder="John Doe"
+                            placeholder="Your full name"
                           />
                         </div>
                         <div>
@@ -130,7 +130,7 @@ export default function Contact() {
                             value={form.email}
                             onChange={e => setForm({ ...form, email: e.target.value })}
                             className="w-full border border-gray-200 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary"
-                            placeholder="john@example.com"
+                            placeholder="Your email address"
                           />
                         </div>
                       </div>
@@ -153,7 +153,7 @@ export default function Contact() {
                           value={form.message}
                           onChange={e => setForm({ ...form, message: e.target.value })}
                           className="w-full border border-gray-200 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none"
-                          placeholder="Write your message here..."
+                          placeholder="Type your message here..."
                         />
                       </div>
                       <button type="submit" className="btn-primary w-full text-center">

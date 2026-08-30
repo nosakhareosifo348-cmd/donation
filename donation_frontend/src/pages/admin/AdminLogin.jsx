@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Heart, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import api from '../../services/api'
 
 export default function AdminLogin() {
@@ -29,9 +29,13 @@ export default function AdminLogin() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <Heart className="w-8 h-8 text-white" fill="white" />
-          </div>
+          <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-4 shadow-lg rounded-full">
+            <circle cx="32" cy="32" r="32" fill="#1a3c5e"/>
+            <path d="M10 42 C10 36 14 32 20 30 L20 44 C16 46 12 46 10 42Z" fill="white" opacity="0.9"/>
+            <path d="M54 42 C54 36 50 32 44 30 L44 44 C48 46 52 46 54 42Z" fill="white" opacity="0.9"/>
+            <path d="M18 38 Q32 50 46 38 L46 44 Q32 56 18 44 Z" fill="white" opacity="0.9"/>
+            <path d="M32 36 C32 36 22 28 22 22 C22 18 25 16 28 16 C30 16 32 18 32 18 C32 18 34 16 36 16 C39 16 42 18 42 22 C42 28 32 36 32 36Z" fill="#e8532a"/>
+          </svg>
           <h1 className="text-2xl font-bold text-secondary font-heading">GiveHope Admin</h1>
           <p className="text-gray-500 text-sm mt-1">Sign in to your dashboard</p>
         </div>
@@ -51,7 +55,7 @@ export default function AdminLogin() {
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 className="w-full border border-gray-200 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary"
-                placeholder="admin@givehope.com"
+                placeholder="Your email address"
               />
             </div>
             <div>

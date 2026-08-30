@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, Outlet } from 'react-router-dom'
-import { Heart, LayoutDashboard, DollarSign, MessageSquare, Mail, LogOut, Menu, X, Settings, Calendar, BookOpen } from 'lucide-react'
+import { LayoutDashboard, DollarSign, MessageSquare, Mail, LogOut, Menu, X, Settings, Calendar, BookOpen } from 'lucide-react'
 import { useState } from 'react'
 
 const navItems = [
@@ -25,9 +25,13 @@ export default function AdminLayout() {
     <aside className="w-64 bg-secondary text-white flex flex-col h-full">
       <div className="p-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-            <Heart className="w-5 h-5 text-white" fill="white" />
-          </div>
+          <svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+            <circle cx="32" cy="32" r="32" fill="white" fillOpacity="0.15"/>
+            <path d="M10 42 C10 36 14 32 20 30 L20 44 C16 46 12 46 10 42Z" fill="white" opacity="0.9"/>
+            <path d="M54 42 C54 36 50 32 44 30 L44 44 C48 46 52 46 54 42Z" fill="white" opacity="0.9"/>
+            <path d="M18 38 Q32 50 46 38 L46 44 Q32 56 18 44 Z" fill="white" opacity="0.9"/>
+            <path d="M32 36 C32 36 22 28 22 22 C22 18 25 16 28 16 C30 16 32 18 32 18 C32 18 34 16 36 16 C39 16 42 18 42 22 C42 28 32 36 32 36Z" fill="#e8532a"/>
+          </svg>
           <div>
             <div className="font-bold text-sm font-heading">GiveHope</div>
             <div className="text-white/50 text-xs">Admin Panel</div>

@@ -15,7 +15,7 @@
   }
 
   body {
-    font-family: 'Poppins', Helvetica, sans-serif;
+    font-family: 'Inter', Helvetica, sans-serif;
     color: #333;
     background-color: #fff;
     line-height: 1.7;
@@ -24,7 +24,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Poppins', sans-serif;
   }
 
   /* Focus ring for accessibility */

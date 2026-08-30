@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, MapPin, Phone, Mail } from 'lucide-react'
+import { MapPin, Phone, Mail } from 'lucide-react'
 import { FacebookIcon, TelegramIcon, InstagramIcon } from './SocialIcons'
 import { useSettings } from '../context/SettingsContext'
+import Logo from './Logo'
 import api from '../services/api'
 
 const footerLinks = {
@@ -82,15 +83,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {/* Brand */}
             <div>
-              <Link to="/" className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-6 h-6 text-white" fill="white" />
-                </div>
-                <div>
-                  <div className="font-bold text-white text-sm font-heading leading-tight">GiveHope</div>
-                  <div className="text-primary text-xs font-semibold tracking-wider uppercase">Organization</div>
-                </div>
-              </Link>
+              <Logo dark size={12} />
               <p className="text-white/70 text-sm leading-relaxed mb-6">
                 GiveHope Organization was established in 2014 to save orphaned, abandoned, and vulnerable children and provide them with shelter, education, and hope.
               </p>

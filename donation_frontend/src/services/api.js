@@ -41,6 +41,19 @@ const api = {
   // Settings
   getSettings: () => api.get('/settings'),
   updateSettings: (data) => request('/settings', { method: 'PUT', body: JSON.stringify(data) }),
+
+  // Events
+  getEvents: (params = '') => api.get(`/events${params}`),
+  createEvent: (data) => api.post('/events', data),
+  updateEvent: (id, data) => request(`/events/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteEvent: (id) => request(`/events/${id}`, { method: 'DELETE' }),
+
+  // Posts (Blog)
+  getPosts: (params = '') => api.get(`/posts${params}`),
+  getPostById: (id) => api.get(`/posts/${id}`),
+  createPost: (data) => api.post('/posts', data),
+  updatePost: (id, data) => request(`/posts/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deletePost: (id) => request(`/posts/${id}`, { method: 'DELETE' }),
 }
 
 export default api

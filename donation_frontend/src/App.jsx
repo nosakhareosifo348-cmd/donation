@@ -21,6 +21,8 @@ import AdminDonations from './pages/admin/AdminDonations'
 import AdminMessages from './pages/admin/AdminMessages'
 import AdminSubscribers from './pages/admin/AdminSubscribers'
 import AdminSettings from './pages/admin/AdminSettings'
+import AdminEvents from './pages/admin/AdminEvents'
+import AdminBlog from './pages/admin/AdminBlog'
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -41,6 +43,8 @@ export default function App() {
           <Route path="donations" element={<AdminDonations />} />
           <Route path="messages" element={<AdminMessages />} />
           <Route path="subscribers" element={<AdminSubscribers />} />
+          <Route path="events" element={<AdminEvents />} />
+          <Route path="blog" element={<AdminBlog />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
 

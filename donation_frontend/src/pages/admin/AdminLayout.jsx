@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, Outlet } from 'react-router-dom'
-import { Heart, LayoutDashboard, DollarSign, MessageSquare, Mail, LogOut, Menu, X, Settings } from 'lucide-react'
+import { Heart, LayoutDashboard, DollarSign, MessageSquare, Mail, LogOut, Menu, X, Settings, Calendar, BookOpen } from 'lucide-react'
 import { useState } from 'react'
 
 const navItems = [
@@ -7,6 +7,8 @@ const navItems = [
   { to: '/gh-control/donations', icon: DollarSign, label: 'Donations' },
   { to: '/gh-control/messages', icon: MessageSquare, label: 'Messages' },
   { to: '/gh-control/subscribers', icon: Mail, label: 'Subscribers' },
+  { to: '/gh-control/events', icon: Calendar, label: 'Events' },
+  { to: '/gh-control/blog', icon: BookOpen, label: 'Blog' },
   { to: '/gh-control/settings', icon: Settings, label: 'Settings' },
 ]
 
